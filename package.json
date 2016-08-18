@@ -1,10 +1,14 @@
 {
   "name": "adelia-cli",
   "version": "0.0.1",
-  "description": "",
+  "description": "This package for generate frontend need development for realtime jakarta, in general we create controller, service and view.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zainul-realtime/adelia-cli.git"
   },
   "author": "Zainul <zainul@realtimejakarta.com> (zainul)",
   "license": "ISC",
