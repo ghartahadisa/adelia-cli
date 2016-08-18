@@ -1,0 +1,110 @@
+angular.module('frontendApp')
+  .controller('<%- controllerName %>Ctrl', function ($location, $scope, $injector, <%- controllerName %>Service, $route, $routeParams){
+    var dialog = $injector.get('modalService');
+    var sizes = $injector.get('showTableSize');
+    $scope.sizes = sizes;
+    // for pagination only
+    $scope.size     = sizes.list[0].value;
+    $scope.sorting  = 'name';
+    $scope.sortType = 'asc';
+    $scope.keyword  = '';
+    $scope.filterBy = 'query';
+
+    $scope.pagination = { current: 1 };
+    $scope.sort       = { column: 'name', descending: false };
+
+    $scope.headers = [
+      {id: 'code', name: 'Code', sortable: true},
+      {id: 'name', name: 'Name', sortable: true},
+      {id: 'description', name: 'Description', sortable: true},
+      {id: '#', name: 'Action', sortable: false}
+    ];
+    // end pagination
+
+    $scope.asset = {};
+    $scope.isEdit = false;
+
+    $scope.selectedColumn = function(column) {
+        return $scope.headers[column].id == $scope.sort.column && 'sort-' + $scope.sort.descending;
+    };
+
+    $scope.changeShowData = function(){ $scope.pagination = { current: 1 }; $scope.index(1); }
+
+    $scope.changeSorting = function(column) {
+      if ($scope.headers[column].sortable) {
+          var sort = $scope.sort;
+          var columnId = $scope.headers[column].id;
+
+          if (sort.column == columnId) {
+              sort.descending = !sort.descending;
+              $scope.sorting = columnId;
+          } else {
+              sort.column = columnId;
+              sort.descending = false;
+              $scope.sorting = columnId;
+          }
+
+          if(sort.descending)
+            $scope.sortType = 'desc';
+          else
+            $scope.sortType = 'asc';
+
+          $scope.index(1);
+      }
+    };
+
+    $scope.index = function(page) {
+      var options = {
+          size: $scope.size,
+          page: (page - 1),
+          sort: $scope.sorting,
+          sortType: $scope.sortType,
+          keyword : $scope.keyword,
+          filterBy : $scope.filterBy
+      }
+
+      <%- controllerName %>Service.index(options, function(response) {
+        $scope.<%- controllerName %>s =  response.content;
+        $scope.total_count = response.totalElements;
+        $scope.userPerPage = response.size;
+      })
+    };
+
+    $scope.isEdit = false;
+    if ('id' in $routeParams) {
+        $scope.isEdit = true;
+        <%- controllerName %>Service.show($routeParams.id, function(response) {
+          $scope.<%- controllerName %> = response;
+        })
+    }
+
+    // Create
+    $scope.create =  function() {
+      <%- controllerName %>Service.create($scope.<%- controllerName %>, function(response) {
+        $route.reload();
+      })
+    }
+
+    $scope.edit = function() {
+      <%- controllerName %>Service.update($scope.<%- controllerName %>.id, $scope.<%- controllerName %>, function(response) {
+        $location.path('/<%- controllerName %>s/');
+      })
+    }
+
+    $scope.archive = function(id) {
+      //console.log(id)
+      dialog.confirmDelete().then(function() {
+        <%- controllerName %>Service.archive(id, function(response) {
+          $route.reload();
+        })
+      })
+    }
+
+    $scope.filter = function(keyword, filterBy) {
+        $scope.filterBy = filterBy;
+        $scope.index(1);
+    };
+
+    $scope.index(1)
+
+  });

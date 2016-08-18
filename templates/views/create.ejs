@@ -1,0 +1,17 @@
+<h1 class="page-title">Create <%- viewName %></h1>
+<div ng-controller="<%- viewName %>Ctrl">
+  <md-content>
+    <div class="blank-divider"></div>
+    <form name="<%- viewName %>Form" ng-submit="create()">
+      <md-input-container class="md-block">
+        <label>Name</label>
+        <input name="name" ng-model="<%- viewName %>.name" required>
+        <div ng-messages="<%- viewName %>Form.name.$touched && <%- viewName %>Form.name.$error">
+          <div ng-message="required">This is required!</div>
+        </div>
+      </md-input-container>
+
+      <md-button type="submit" class="submit-button md-raised btn-continue md-primary">Create</md-button>
+    </form>
+  </md-content>
+</div>

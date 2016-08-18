@@ -1,0 +1,68 @@
+'use strict';
+
+/**
+ * @ngdoc service
+ * @name frontendApp.<%- serviceName %>
+ * @description
+ * # <%- serviceName %>
+ * Service in the frontendApp.
+ */
+angular.module('frontendApp')
+  .service('<%- serviceName %>Service', function ($http, $rootScope, API_URL) {
+    var <%- serviceName %> = {};
+    <%- serviceName %>.create = function(options, callback) {
+      $http.post(API_URL+'/<%- serviceName %>/',options)
+        .then(function(response) {
+          callback(response);
+        });
+    };
+
+    <%- serviceName %>.show = function(id, callback) {
+      $http.get(API_URL+"/<%- serviceName %>/"+id)
+        .success(function (response) {
+          callback(response);
+        });
+    };
+
+    <%- serviceName %>.destroy = function(id, callback) {
+      $http.delete(API_URL+'/<%- serviceName %>/'+id)
+        .then(function(response) {
+          callback(response);
+        });
+    };
+
+    <%- serviceName %>.all = function(callback) {
+      $http.get(API_URL+'/<%- serviceName %>/all/')
+        .then(function(response) {
+          callback(response);
+        });
+    };
+
+    <%- serviceName %>.index = function (options, callback) {
+      var optionString = Object.keys(options).length === 0 ? '' : '?page=' + options.page + '&size=' + options.size
+        + '&sort=' + options.sort +',' + options.sortType + '&' + options.filterBy
+        + '=' + options.keyword;
+
+      $http.get(API_URL+'/<%- serviceName %>'+optionString)
+      .then(function (response){
+        callback(response.data)
+      })
+    };
+
+    <%- serviceName %>.archive = function(id, callback) {
+      $http.put(API_URL+"/<%- serviceName %>/softDelete/"+id)
+        .success(function (response) {
+          callback(response);
+        });
+    };
+
+    <%- serviceName %>.update = function(id, options, callback) {
+      $http.put(API_URL+"/<%- serviceName %>/"+id, options)
+        .success(function (response) {
+          callback(response);
+        });
+    };
+
+
+    return <%- serviceName %>;
+  });

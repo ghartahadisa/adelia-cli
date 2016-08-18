@@ -1,0 +1,96 @@
+<h1 class="page-title">Manage <%- viewName %></h1>
+<md-tabs md-dynamic-height md-border-bottom>
+  <md-tab label="<%- viewName %>">
+    <md-content class="md-padding" ng-controller="<%- viewName %>Ctrl">
+      <div layout class="filter-table">
+        <md-input-container class="col-xs-6 col-sm-8">
+          <label>Filter</label>
+          <input ng-model="keyword">
+        </md-input-container>
+        <md-input-container  class="col-xs-3">
+          <md-select ng-model="searchBy">
+            <md-option ng-repeat="(i, header) in headers" value="{{header.id}}" ng-if="header.sortable == true" >
+              {{ header.name }}
+            </md-option>
+            <md-option value="all">All</md-option>
+          </md-select>
+        </md-input-container>
+        <md-button ng-click="filter(keyword, searchBy)" class="md-fab md-primary md-mini">
+          <md-icon class="material-design-icons md-light">search</md-icon>
+        </md-button>
+
+        <md-button href="/#/<%- viewName %>/create" class="md-fab md-mini md-raised md-warn">
+          <md-icon class="material-design-icons md-light">add</md-icon>
+        </md-button>
+      </div>
+      <div class="table-responsive-vertical shadow-z-1">
+      <table class="table table-hover table-mc-light-blue">
+        <thead>
+          <tr>
+            <th ng-repeat="(i,header) in headers" ng-click="changeSorting(i)" class="header-table" ng-class="selectedColumn(i)">
+              {{ header.name }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr dir-paginate="<%- viewName %> in <%- viewName %>s | itemsPerPage:size" total-items="total_count" pagination-id="<%- viewName %>Page" >
+            <td data-title="Name">{{<%- viewName %>.name}}</td>
+            <td data-title="Action" width="10" align="center">
+              <md-menu md-position-mode="target-right target" ng-click="stopPropagation($event)">
+                <md-button aria-label="Open action menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                  <md-icon class="material-design-icons md-dark">more_horiz</md-icon>
+                </md-button>
+                <md-menu-content width="3" >
+                  <md-menu-item>
+                      <md-button href="/#/<%- viewName %>s/{{<%- viewName %>.id}}/edit">
+                        <div layout="row">
+                            <md-icon class="material-design-icons md-dark">mode_edit</md-icon>
+                            <p flex>Edit</p>
+                          </div>
+                      </md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                      <md-button href="/#/<%- viewName %>s/{{<%- viewName %>.id}}">
+                        <div layout="row">
+                            <md-icon class="material-design-icons md-dark">visibility</md-icon>
+                            <p flex>View</p>
+                          </div>
+                      </md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                      <md-button href="" ng-click="delete(<%- viewName %>.id)">
+                        <div layout="row">
+                          <md-icon class="material-design-icons md-dark">delete</md-icon>
+                            <p flex>Delete</p>
+                          </div>
+                      </md-button>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div layout="row">
+        <div style="padding-left:15px;">
+          <br/>Show
+        </div>
+        <div class="col-sm-1">
+          <md-select ng-model="size" ng-change="changeShowData()"  class="select-size-data">
+            <md-option ng-init="size[0]" ng-repeat="(i, size) in sizes.list" value="{{size.value}}">{{ size.name }}</md-option>
+          </md-select>
+        </div>
+        <div class="col-sm-11 col-xs-8">
+          <dir-pagination-controls
+          pagination-id="<%- viewName %>Page"
+          max-size="8"
+          direction-links="true"
+          boundary-links="true"
+          on-page-change="index(newPageNumber)" >
+          </dir-pagination-controls>
+        </div>
+
+    </md-content>
+  </md-tab>
+</md-tabs>

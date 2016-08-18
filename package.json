@@ -1,0 +1,22 @@
+{
+  "name": "adelia-cli",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zainul <zainul@realtimejakarta.com> (zainul)",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.9.0",
+    "progress": "^1.1.8",
+    "underscore": "^1.8.3"
+  },
+  "bin": {
+    "adelia": "./index.js"
+  }
+}
